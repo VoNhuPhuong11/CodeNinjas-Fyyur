@@ -1,0 +1,23 @@
+{
+  "name": "CodeNinjas-Fyyur",
+  "version": "1.0.0",
+  "description": "Fyyur is a musical venue and artist booking site that facilitates the discovery and bookings of shows between local performing artists and venues. This site lets you list new artists and venues, discover them, and list shows with artists as a venue owner.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoNhuPhuong11/CodeNinjas-Fyyur.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VoNhuPhuong11/CodeNinjas-Fyyur/issues"
+  },
+  "homepage": "https://github.com/VoNhuPhuong11/CodeNinjas-Fyyur#readme",
+  "dependencies": {
+    "bootstrap": "^3.4.1"
+  }
+}
