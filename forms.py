@@ -30,17 +30,6 @@ class GenreEnum(Enum):
 def validate_phone(phone):
     formatPhone = re.compile('^[0-9]{3}-[0-9]{3}-[0-9]{4}$')
     return formatPhone.match(phone)
-
-def validate(form):
-    isValid = Form.validate(form)
-    if not isValid:
-        return False
-    if not validate_phone(form.phone.data):
-        form.phone.errors.append('Invalid Phone Number.')
-        return False
-    if not set(form.genres.data).issubset(dict(GenreEnum.choices()).keys()):
-        form.genres.errors.append('Invalid Genres.')
-        return False
         
 class ShowForm(Form):
     artist_id = StringField(
