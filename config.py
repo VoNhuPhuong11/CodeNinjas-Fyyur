@@ -8,7 +8,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 
 # Connect to the database
-
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = 'postgresql://phuongvn3:123@localhost:5432/codeninjas'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URI)

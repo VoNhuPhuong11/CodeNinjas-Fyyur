@@ -1,6 +1,6 @@
 from datetime import datetime
 from xml.dom import ValidationErr
-from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
 from wtforms.validators import DataRequired, AnyOf, URL, Regexp
 from enum import Enum

@@ -1,31 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from flask import Flask
-from flask_migrate import Migrate
-from flask_moment import Moment
+
 db = SQLAlchemy()
-
-#----------------------------------------------------------------------------#
-# App Config.
-#----------------------------------------------------------------------------#
-
-app = Flask(__name__)
-moment = Moment(app)
-app.config.from_object('config')
-# db = SQLAlchemy(app)
-db.init_app(app)
-db.app = app
-migrate = Migrate(app, db)
-#----------------------------------------------------------------------------#
-# Models.
-#----------------------------------------------------------------------------#
-
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     name = db.Column(db.String)
-    genres = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String), nullable=False)
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
@@ -35,14 +17,14 @@ class Venue(db.Model):
     website = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
-    shows = db.relationship("Show", backref="venues", lazy=False)
+    shows = db.relationship('Show', backref='venue', lazy='joined', cascade="all, delete")
  
 class Artist(db.Model):
     __tablename__ = 'Artist'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String)
-    genres = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String), nullable=False)
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
@@ -51,7 +33,7 @@ class Artist(db.Model):
     website = db.Column(db.String(120))
     seeking_venue = db.Column(db.Boolean, default = False)
     seeking_description = db.Column(db.String(120))
-    shows = db.relationship("Show", backref="artists", lazy=False)
+    shows = db.relationship('Show', backref='artist', lazy='joined', cascade="all, delete")
 
 class Show(db.Model):
   __tablename__ = 'Show'
