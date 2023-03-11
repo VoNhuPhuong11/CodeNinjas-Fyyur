@@ -40,6 +40,7 @@ app.jinja_env.filters['datetime'] = format_datetime
 # Controllers.
 #----------------------------------------------------------------------------#
 
+
 @app.route('/')
 def index():
   return render_template('pages/home.html')
@@ -101,25 +102,53 @@ def search_venues():
 def show_venue(venue_id):
   # shows the venue page with the given venue_id
   venue = Venue.query.get_or_404(venue_id)
-  past_shows = []
   upcoming_shows = []
-  for show in venue.shows:
-    temp_show = {
-      'artist_id': show.artist_id,
-      'artist_name': show.artist.name,
-      'artist_image_link': show.artist.image_link,
-      'start_time': show.start_time.strftime("%m/%d/%Y, %H:%M")
-    }
-    if show.start_time <= datetime.now():
-      past_shows.append(temp_show)
-    else:
-      upcoming_shows.append(temp_show)
-  # object class to dict
-  data = vars(venue)
-  data['past_shows'] = past_shows
-  data['upcoming_shows'] = upcoming_shows
-  data['past_shows_count'] = len(past_shows)
-  data['upcoming_shows_count'] = len(upcoming_shows)
+  past_shows = []
+  past_shows= db.session.query(Artist, Show).join(Show).join(Venue).\
+      filter(
+          Show.venue_id == venue_id,
+          Show.artist_id == Artist.id,
+          Show.start_time < datetime.now()
+      ).\
+      all()
+
+  upcoming_shows = db.session.query(Artist, Show).join(Show).join(Venue).\
+    filter(
+        Show.venue_id == venue_id,
+        Show.artist_id == Artist.id,
+        Show.start_time > datetime.now()
+    ).\
+    all()
+  
+  data = {
+    "id": venue.id,
+    "name": venue.name,
+    "genres": venue.genres,
+    "address": venue.address,
+    "city": venue.city,
+    "state": venue.state,
+    "phone": venue.phone,
+    "website": venue.website,
+    "facebook_link": venue.facebook_link,
+    "seeking_talent": venue.seeking_talent,
+    "seeking_description": venue.seeking_description,
+    "image_link": venue.image_link,
+    "past_shows": [{
+        'artist_id': artist.id,
+        "artist_name": artist.name,
+        "artist_image_link": artist.image_link,
+        "start_time": show.start_time.strftime("%m/%d/%Y, %H:%M")
+    } for artist, show in past_shows],
+    'upcoming_shows': [{
+        'artist_id': artist.id,
+        'artist_name': artist.name,
+        'artist_image_link': artist.image_link,
+        'start_time': show.start_time.strftime("%m/%d/%Y, %H:%M")
+    } for artist, show in upcoming_shows],
+    'past_shows_count': len(past_shows),
+    'upcoming_shows_count': len(upcoming_shows)
+  }
+
   return render_template('pages/show_venue.html', venue=data)
 
 #  Create Venue
